@@ -28,14 +28,11 @@ def length_of_longest_substring_n3(s):
           in s that contains no repeating characters.
     """
 
-    max_length = 0
-    
+    max_length = 0   
     for start_index in range(len(s)):
         for current_index in range(start_index + 1, len(s) + 1):
-            frequency_list = [0] * 256
             sub_string = s[start_index:current_index]
             repeating = False
-            
             for char in range(len(sub_string) - 1):
                 if sub_string[char] in sub_string[char + 1:]:
                     repeating = True
@@ -70,8 +67,7 @@ def length_of_longest_substring_n2(s):
             index = ord(s[temp_index])
 
             if frequency_list[index] >= 1:
-                break
-            
+                break           
             frequency_list[index] += 1
             current_length += 1
 
@@ -96,13 +92,12 @@ def length_of_longest_substring_n(s):
     for start_index in range(length):
         frequency_list = [0] * 256
         for current_index in range(start_index, length):
-            index = ord(s[current_index])
-                             
+            index = ord(s[current_index])                          
             if frequency_list[index] >= 1:
                 break
 
             frequency_list[index] += 1
 
-            if max_length < (current_index - start_index + 1):
-                max_length = current_index - start_index + 1
+            max_length = max(max_length, current_index - start_index + 1)
+
     return max_length
