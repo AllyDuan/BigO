@@ -31,24 +31,20 @@ def length_of_longest_substring_n3(s):
     max_length = 0
     
     for start_index in range(len(s)):
-        for current_index in range(start_index, len(s)):
+        for current_index in range(start_index + 1, len(s) + 1):
             frequency_list = [0] * 256
-            sub_string = s[start_index:current_index + 1]
-            current_length = 0
+            sub_string = s[start_index:current_index]
+            repeating = False
             
-            for char in sub_string:
-                index = ord(char)
-                frequency_list[index] += 1
-                
-            if frequency_list[index] < 1:
-                current_length += 1
-                if current_length > max_length:
-                    max_length = current_length
-    
-    return max_length
-        
-    pass
+            for char in range(len(sub_string) - 1):
+                if sub_string[char] in sub_string[char + 1:]:
+                    repeating = True
+                    break
 
+            if not repeating and len(sub_string) > max_length:
+                max_length = len(sub_string)
+
+    return max_length
 
 # TODO: implement this function. You may delete this comment when you are done.
 def length_of_longest_substring_n2(s):
@@ -63,52 +59,51 @@ def length_of_longest_substring_n2(s):
           in s that contains no repeating characters.
     """
     max_length = 0
-    # n = len(s)
 
-    start_index = s[0]
-    frequency_list = [0] * 256
-    for current_index in range(start_index, len(s)):
-        index = ord(s[current_index])
-        frequency_list[index] += 1
-        
-    if frequency_list[index] < 1:
-        current_length = current_index - start_index + 1
+    start_index = 0
+    length = len(s)
+    for current_index in range(start_index, length):
+        current_length = 0
+        frequency_list = [0] * 256
+
+        for temp_index in range(current_index, length):
+            index = ord(s[temp_index])
+
+            if frequency_list[index] >= 1:
+                break
+            
+            frequency_list[index] += 1
+            current_length += 1
+
         if current_length > max_length:
             max_length = current_length
 
     return max_length
-    
-    pass
 
 
-# TODO: implement this function. You may delete this comment when you are done.
 def length_of_longest_substring_n(s):
     """
     Finds the length of the longest substring without repeating characters
-    using a frequency list approach (O(N)), converting each character to
+    using a sliding window approach (O(N)), converting each character to
     their corresponding numeric representation in ASCII as the index into the
-    frequency list. However, this approach stops early, breaking out of the inner
-    loop when a repeating character is found. You may also choose to challenge
-    yourself by implementing a sliding window approach.
+    frequency list.
 
     pre: s is a string of arbitrary length, possibly empty.
     post: Returns an integer >= 0 representing the length of the longest substring
           in s that contains no repeating characters.
     """
     max_length = 0
+    length = len(s)
+    for start_index in range(length):
+        frequency_list = [0] * 256
+        for current_index in range(start_index, length):
+            index = ord(s[current_index])
+                             
+            if frequency_list[index] >= 1:
+                break
 
-    start_index = s[0]
-    frequency_list = [0] * 256
-    for current_index in range(start_index, len(s)):
-        index = ord(s[current_index])
-        frequency_list[index] += 1
-        
-        if frequency_list[index] > 1:
-            break
-        if frequency_list[index] < 1:
-            current_length = current_index - start_index + 1
-            if current_length > max_length:
-                max_length = current_length
-        start_index += 1
+            frequency_list[index] += 1
 
+            if max_length < (current_index - start_index + 1):
+                max_length = current_index - start_index + 1
     return max_length
